@@ -1,12 +1,18 @@
 {
   "name": "@tssdevs/nest-door-bell",
-  "version": "1.0.0",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "version": "1.0.3",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "description": "Tss authentication service wrapper that relies on nest js.",
   "author": "Oluwatobi Adenekan <oluwatobi.t.adenekan@gmail.com>",
   "scripts": {
     "build": "tsc"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "url": "git://github.com/tssdevs/nest-door-bell.git"
   },
   "license": "MIT",
   "dependencies": {

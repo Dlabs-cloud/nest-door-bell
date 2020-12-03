@@ -12,11 +12,11 @@
       "dom"
     ],
     "target": "es2017",
-    "outDir": "dist",
+    "outDir": "lib",
     "incremental": true
   },
   "exclude": [
     "node_modules",
-    "dist"
+    "lib"
   ]
 }
