@@ -1,6 +1,6 @@
 {
   "name": "@tssdevs/nest-door-bell",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "description": "Tss authentication service wrapper that relies on nest js.",
