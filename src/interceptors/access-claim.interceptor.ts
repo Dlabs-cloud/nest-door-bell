@@ -7,7 +7,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import {Reflector} from '@nestjs/core';
-import {ACCESS_CLAIMS_EXTRACTOR, PUBLIC_ACCESS} from "../constants";
+import {ACCESS_CLAIMS_EXTRACTOR, ANONYMOUS_USER} from "../constants";
 import {AccessClaimsExtractor} from "../contracts";
 
 @Injectable()
@@ -22,10 +22,10 @@ export class AccessClaimInterceptor implements NestInterceptor {
 
         const request = context.switchToHttp().getRequest();
 
-        const publicAccessType = this.reflector.getAll(PUBLIC_ACCESS, [
+        const publicAccessType = this.reflector.getAll(ANONYMOUS_USER, [
             context.getHandler(), context.getClass(),
         ]);
-        if (publicAccessType.includes(PUBLIC_ACCESS)) {
+        if (publicAccessType.includes(ANONYMOUS_USER)) {
             return next.handle();
         }
 

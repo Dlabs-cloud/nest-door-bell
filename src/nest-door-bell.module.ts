@@ -1,15 +1,15 @@
-import {Configuration} from './auth-api-sdk';
+import {Configuration} from './sdk/auth-api-sdk';
 import {DynamicModule, Global, Inject, Module, OnModuleInit} from '@nestjs/common';
 import {
-    AccessClaimExtractorProvider, AccessClaimInterceptorProvider,
-    ApiSdkProvider,
-    AxiosProvider,
+    AccessClaimExtractorProvider, AccessClaimInterceptorProvider, AuthApiKeyResolverProvider,
+    AxiosProvider, BearerTokenKeyProvider, CacheKeyResolverProvider,
     createAuthServiceProvider,
     ExceptionFilters
 } from "./providers";
 import {AXIOS_PROVIDER} from "./constants";
 import {AxiosResponseException} from "./exceptions";
 import {AxiosStatic} from 'axios';
+import {AuthApiConfig} from "./data/auth-api.config";
 
 @Global()
 @Module({
@@ -17,25 +17,25 @@ import {AxiosStatic} from 'axios';
         AxiosProvider,
     ],
 })
-export class TssAuthServiceModule implements OnModuleInit {
+export class NestDoorBellModule implements OnModuleInit {
     constructor(@Inject(AXIOS_PROVIDER) private readonly axios: AxiosStatic) {
     }
 
-    public static forRoot(config: Configuration): DynamicModule {
+    public static forRoot(config: AuthApiConfig): DynamicModule {
         const providers = [
             ...createAuthServiceProvider(config),
             AccessClaimExtractorProvider,
-            ApiSdkProvider,
             AxiosProvider,
+            CacheKeyResolverProvider,
+            AuthApiKeyResolverProvider,
+            BearerTokenKeyProvider,
             ...ExceptionFilters,
             ...AccessClaimInterceptorProvider,
         ];
         return {
-            module: TssAuthServiceModule,
+            module: NestDoorBellModule,
             providers: providers,
-            exports: [
-                ApiSdkProvider,
-            ],
+            exports: [],
         };
     }
 

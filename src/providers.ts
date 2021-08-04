@@ -1,19 +1,34 @@
-import {Configuration, DefaultApi} from './auth-api-sdk';
+import {Configuration} from './sdk/auth-api-sdk';
 import {Provider} from '@nestjs/common';
-import axios, {AxiosStatic} from 'axios';
+import axios, {AxiosInstance} from 'axios';
 
 import {APP_FILTER, APP_INTERCEPTOR} from '@nestjs/core';
-import {ACCESS_CLAIMS_EXTRACTOR, AUTH_SERVICE_OPTIONS, AXIOS_PROVIDER, TSS_AUTH_API} from "./constants";
+import {
+    ACCESS_CLAIMS_EXTRACTOR,
+    AUTH_API_KEY_RESOLVER,
+    AUTH_SERVICE_OPTIONS,
+    AXIOS_PROVIDER,
+    CACHE_KEY_RESOLVER
+} from "./constants";
 import {AxiosResponseExceptionFilter, TokenExpiredExceptionFilter, UnAuthorisedExceptionFilter} from "./filters";
 import {AccessClaimInterceptor} from "./interceptors";
 import {ClaimsExtractorCore} from "./core/claims-extractor.core";
+import {CacheKeyResolver} from "./key-resolvers/impl/cache.key-resolver";
+import {AuthApiKeyResolver} from "./key-resolvers/impl/auth-api.key-resolver";
+import {KeyResolver} from "./key-resolvers/key-resolver";
+import {BearerTokenValidator} from "./core/bearer-token-validator";
+import {AuthApiConfig} from "./data/auth-api.config";
 
 
-export function createAuthServiceProvider(options: Configuration): Provider[] {
+export function createAuthServiceProvider(options: AuthApiConfig): Provider[] {
     return [
         {
             provide: AUTH_SERVICE_OPTIONS,
-            useValue: options,
+            useFactory: () => {
+                return {
+                    basePath: options.basePath
+                };
+            },
         },
     ];
 }
@@ -43,11 +58,12 @@ export const AxiosProvider = {
 
 export const AccessClaimExtractorProvider = {
     provide: ACCESS_CLAIMS_EXTRACTOR,
-    useFactory: (authService: DefaultApi) => {
-        return new ClaimsExtractorCore(authService);
+    useFactory: (keyResolver: KeyResolver, bearerTokenValidator: BearerTokenValidator) => {
+        return new ClaimsExtractorCore(keyResolver, bearerTokenValidator);
     },
     inject: [
-        TSS_AUTH_API,
+        CACHE_KEY_RESOLVER,
+        BearerTokenValidator
     ],
 };
 
@@ -60,13 +76,33 @@ export const AccessClaimInterceptorProvider = [
     },
 ];
 
-export const ApiSdkProvider = {
-    provide: TSS_AUTH_API,
-    useFactory: (options: Configuration, axios: AxiosStatic) => {
-        return new DefaultApi(options, options.basePath, axios);
+
+export const CacheKeyResolverProvider = {
+    provide: CACHE_KEY_RESOLVER,
+    useFactory: (authApiKeyResolver: KeyResolver) => {
+        return new CacheKeyResolver(authApiKeyResolver)
+    },
+    inject: [
+        AUTH_API_KEY_RESOLVER
+    ]
+}
+
+export const AuthApiKeyResolverProvider = {
+    provide: AUTH_API_KEY_RESOLVER,
+    useFactory: (configuration: Configuration, axios: AxiosInstance) => {
+        return new AuthApiKeyResolver(configuration, axios)
     },
     inject: [
         AUTH_SERVICE_OPTIONS,
-        AXIOS_PROVIDER,
-    ],
-};
+        AXIOS_PROVIDER
+    ]
+}
+
+export const BearerTokenKeyProvider = {
+    provide: BearerTokenValidator,
+    useClass: BearerTokenValidator
+}
+
+
+
+
