@@ -1,8 +1,11 @@
-import {Configuration} from './sdk/auth-api-sdk';
 import {DynamicModule, Global, Inject, Module, OnModuleInit} from '@nestjs/common';
 import {
-    AccessClaimExtractorProvider, AccessClaimInterceptorProvider, AuthApiKeyResolverProvider,
-    AxiosProvider, BearerTokenKeyProvider, CacheKeyResolverProvider,
+    AccessClaimExtractorProvider,
+    AccessClaimInterceptorProvider,
+    AuthApiKeyResolverProvider,
+    AxiosProvider,
+    BearerTokenKeyProvider,
+    CacheKeyResolverProvider,
     createAuthServiceProvider,
     ExceptionFilters
 } from "./providers";
@@ -17,7 +20,7 @@ import {AuthApiConfig} from "./data/auth-api.config";
         AxiosProvider,
     ],
 })
-export class NestDoorBellModule implements OnModuleInit {
+export class DoorBellModule implements OnModuleInit {
     constructor(@Inject(AXIOS_PROVIDER) private readonly axios: AxiosStatic) {
     }
 
@@ -33,7 +36,7 @@ export class NestDoorBellModule implements OnModuleInit {
             ...AccessClaimInterceptorProvider,
         ];
         return {
-            module: NestDoorBellModule,
+            module: DoorBellModule,
             providers: providers,
             exports: [],
         };

@@ -1,4 +1,4 @@
-export * from './nest-door-bell.module';
+export * from './door-bell.module';
 export * from './providers';
 export * from './decorators/index';
 export * from './sdk/auth-api-sdk/index';

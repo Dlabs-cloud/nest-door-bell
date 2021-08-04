@@ -1,42 +1,49 @@
 **Auth Service Door Bell**
 
-![enter image description here](https://previews.123rf.com/images/smartbobert/smartbobert1706/smartbobert170600065/80225628-old-vintage-door-bell-button-on-grunge-wall-antique-door-bell.jpg)
-**Nest Door bell**  is a nest js api wrapper for Tss authnetication service API. It handles all authentication to  all TSS services.
+![enter image description here](https://previews.123rf.com/images/smartbobert/smartbobert1706/smartbobert170600065/80225628-old-vintage-door-bell-button-on-grunge-wall-antique-door-bell.jpg)  
+**Nest Door bell** is a nest js api wrapper for Dlabs authnetication service API. It handles all authentication to all
+Dlabs Services services.
 
-# Table of Contents  
-  
-- [Nest Door Bell](#nestjs-early-starter)  
-- [Table of Contents](#table-of-contents)  
-- [Usage](#usage)  
-   - [Installation](#installation)  
-	- [TssAuthServiceModule](#tssAuthServiceModule)  
-  - [Decorators](#decorators)  
-- [Todos](#todos)  
+# Table of Contents
+
+- [Nest Door Bell](#nestjs-early-starter)
+- [Table of Contents](#table-of-contents)
+- [Usage](#usage)
+    - [Installation](#installation)
+    - [DoorBellModule](#DoorBellModule)
+    - [Decorators](#decorators)
+- [Todos](#todos)
 
 ### Installation
-Nest Door bell is a private repository, this means to install,  you must have access to the [Nest Door bell repository](https://github.com/tssdevs/nest-door-bell) . 
 
-Generate an access token for your repo once you have access, the token should have at least read package permission  scope. If all this has been accertained, then create a `.npmrc` file of the project and add the package registry.
+dlabs-nest-door-bell is a private repository, this means to install, you must have access to
+the [Nest Door bell repository](https://github.com/Dlabs-cloud/nest-door-bell) .
 
-Your .npmrc should contain this 
+Generate an access token for your repo once you have access, the token should have at least read package permission
+scope. If all this has been accertained, then create a `.npmrc` file of the project and add the package registry.
 
-    //npm.pkg.github.com/:_authToken=GENERATED_TOKEN
-    @tssdevs:registry=https://npm.pkg.github.com
+Your .npmrc should contain this
 
-After all this has been done simple install package with 
+    //npm.pkg.github.com/:_authToken=GENERATED_TOKEN 
+    @dlabs-cloud:registry=https://npm.pkg.github.com  
 
-    npm install @tssdevs/nest-door-bell
+After all this has been done simple install package with
 
-### TssAuthServiceModule
-TssAuthServiceModule is the core of the package, it serves as the main entry point. 
-Simple import the `TssAuthServiceModule` into your application and add the `forRoot` config
+     npm install @dlabs-cloud/nest-door-bell  
 
-    TssAuthServiceModule.forRoot({  
-      basePath: config.get('services.auth') as any, // The URL on the authentication.
-    }),
+### DoorBellModule
+
+DoorBellModule is the core of the package, it serves as the main entry point.   
+Simple import the `DoorBellModule` into your application and add the `forRoot` config
+
+     DoorBellModule.forRoot({basePath: config.get('services.auth-service-url') as any,
+     }),  
 
 ### Decorators
-After installing the package all created routes are automatically guarded. To keep the route open for all request simple add the `@Public()` decorator to the controller or the method.
+
+After installing the package all created routes are automatically guarded. To keep the route open for all request simple
+add the `@AnonymousUser()` decorator to the controller or the method.
 
 ### Todos
+
 There is a need for better test covorage.
